@@ -39,30 +39,30 @@ EOT
     resource_group_name       = string
     sku                       = string
     domain_configuration_type = optional(string)
-    filtered_sync_enabled     = optional(bool, false)
+    filtered_sync_enabled     = optional(bool) # Default: false
     tags                      = optional(map(string))
     initial_replica_set = object({
       subnet_id = string
     })
     notifications = optional(object({
       additional_recipients = optional(set(string))
-      notify_dc_admins      = optional(bool, false)
-      notify_global_admins  = optional(bool, false)
+      notify_dc_admins      = optional(bool) # Default: false
+      notify_global_admins  = optional(bool) # Default: false
     }))
     secure_ldap = optional(object({
       enabled                  = bool
-      external_access_enabled  = optional(bool, false)
+      external_access_enabled  = optional(bool) # Default: false
       pfx_certificate          = string
       pfx_certificate_password = string
     }))
     security = optional(object({
-      kerberos_armoring_enabled       = optional(bool, false)
-      kerberos_rc4_encryption_enabled = optional(bool, false)
-      ntlm_v1_enabled                 = optional(bool, false)
-      sync_kerberos_passwords         = optional(bool, false)
-      sync_ntlm_passwords             = optional(bool, false)
-      sync_on_prem_passwords          = optional(bool, false)
-      tls_v1_enabled                  = optional(bool, false)
+      kerberos_armoring_enabled       = optional(bool) # Default: false
+      kerberos_rc4_encryption_enabled = optional(bool) # Default: false
+      ntlm_v1_enabled                 = optional(bool) # Default: false
+      sync_kerberos_passwords         = optional(bool) # Default: false
+      sync_ntlm_passwords             = optional(bool) # Default: false
+      sync_on_prem_passwords          = optional(bool) # Default: false
+      tls_v1_enabled                  = optional(bool) # Default: false
     }))
   }))
 }
