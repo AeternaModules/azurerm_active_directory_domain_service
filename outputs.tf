@@ -1,3 +1,7 @@
+output "active_directory_domain_services_id" {
+  description = "Map of id values across all active_directory_domain_services, keyed the same as var.active_directory_domain_services"
+  value       = { for k, v in azurerm_active_directory_domain_service.active_directory_domain_services : k => v.id }
+}
 output "active_directory_domain_services_deployment_id" {
   description = "Map of deployment_id values across all active_directory_domain_services, keyed the same as var.active_directory_domain_services"
   value       = { for k, v in azurerm_active_directory_domain_service.active_directory_domain_services : k => v.deployment_id }
