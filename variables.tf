@@ -39,60 +39,39 @@ EOT
     resource_group_name       = string
     sku                       = string
     domain_configuration_type = optional(string)
-    filtered_sync_enabled     = optional(bool) # Default: false
+    filtered_sync_enabled     = optional(bool)
     tags                      = optional(map(string))
     initial_replica_set = object({
       subnet_id = string
     })
     notifications = optional(object({
       additional_recipients = optional(set(string))
-      notify_dc_admins      = optional(bool) # Default: false
-      notify_global_admins  = optional(bool) # Default: false
+      notify_dc_admins      = optional(bool)
+      notify_global_admins  = optional(bool)
     }))
     secure_ldap = optional(object({
       enabled                  = bool
-      external_access_enabled  = optional(bool) # Default: false
+      external_access_enabled  = optional(bool)
       pfx_certificate          = string
       pfx_certificate_password = string
     }))
     security = optional(object({
-      kerberos_armoring_enabled       = optional(bool) # Default: false
-      kerberos_rc4_encryption_enabled = optional(bool) # Default: false
-      ntlm_v1_enabled                 = optional(bool) # Default: false
-      sync_kerberos_passwords         = optional(bool) # Default: false
-      sync_ntlm_passwords             = optional(bool) # Default: false
-      sync_on_prem_passwords          = optional(bool) # Default: false
-      tls_v1_enabled                  = optional(bool) # Default: false
+      kerberos_armoring_enabled       = optional(bool)
+      kerberos_rc4_encryption_enabled = optional(bool)
+      ntlm_v1_enabled                 = optional(bool)
+      sync_kerberos_passwords         = optional(bool)
+      sync_ntlm_passwords             = optional(bool)
+      sync_on_prem_passwords          = optional(bool)
+      tls_v1_enabled                  = optional(bool)
     }))
   }))
-  validation {
-    condition = alltrue([
-      for k, v in var.active_directory_domain_services : (
-        length(v.name) > 0
-      )
-    ])
-    error_message = "must not be empty"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.active_directory_domain_services : (
-        contains(["Standard", "Enterprise", "Premium"], v.sku)
-      )
-    ])
-    error_message = "must be one of: Standard, Enterprise, Premium"
-  }
-  validation {
-    condition = alltrue([
-      for k, v in var.active_directory_domain_services : (
-        v.domain_configuration_type == null || (contains(["FullySynced", "ResourceTrusting"], v.domain_configuration_type))
-      )
-    ])
-    error_message = "must be one of: FullySynced, ResourceTrusting"
-  }
   # --- Unconfirmed validation candidates, derived from azurerm_active_directory_domain_service's provider source ---
   # Not auto-enabled: either a bespoke provider validator we can't safely translate,
   # or a path that crosses a list-typed block (needs its own for_each wrapping).
   # Review, translate into a real validation{} block above, and delete once confirmed.
+  # path: name
+  #   condition: length(value) > 0
+  #   message:   must not be empty
   # path: location
   #   source:    location.EnhancedValidate: no recognizable `if ... { errors = append(...) }` pattern - read it by hand
   # path: resource_group_name
@@ -117,10 +96,16 @@ EOT
   #   source:    [from commonids.ValidateSubnetID] !ok
   # path: initial_replica_set.subnet_id
   #   source:    [from commonids.ValidateSubnetID] err != nil
+  # path: sku
+  #   condition: contains(["Standard", "Enterprise", "Premium"], value)
+  #   message:   must be one of: Standard, Enterprise, Premium
   # path: notifications.additional_recipients[*]
   #   source:    validation.StringIsNotWhiteSpace(...) - no translation rule yet, add one
   # path: secure_ldap.pfx_certificate
   #   source:    azValidate.Base64EncodedString: no recognizable `if ... { errors = append(...) }` pattern - read it by hand
+  # path: domain_configuration_type
+  #   condition: contains(["FullySynced", "ResourceTrusting"], value)
+  #   message:   must be one of: FullySynced, ResourceTrusting
   # path: tags
   #   condition: length(value) <= 50
   #   message:   [from tags.Validate: invalid when len(value) > 50]
