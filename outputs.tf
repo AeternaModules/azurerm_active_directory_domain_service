@@ -20,7 +20,7 @@ output "active_directory_domain_services_filtered_sync_enabled" {
 }
 output "active_directory_domain_services_initial_replica_set" {
   description = "Map of initial_replica_set values across all active_directory_domain_services, keyed the same as var.active_directory_domain_services"
-  value       = { for k, v in azurerm_active_directory_domain_service.active_directory_domain_services : k => v.initial_replica_set if v.initial_replica_set != null && length(v.initial_replica_set) > 0 }
+  value       = { for k, v in azurerm_active_directory_domain_service.active_directory_domain_services : k => one(v.initial_replica_set) if v.initial_replica_set != null && length(v.initial_replica_set) > 0 }
 }
 output "active_directory_domain_services_location" {
   description = "Map of location values across all active_directory_domain_services, keyed the same as var.active_directory_domain_services"
@@ -32,7 +32,7 @@ output "active_directory_domain_services_name" {
 }
 output "active_directory_domain_services_notifications" {
   description = "Map of notifications values across all active_directory_domain_services, keyed the same as var.active_directory_domain_services"
-  value       = { for k, v in azurerm_active_directory_domain_service.active_directory_domain_services : k => v.notifications if v.notifications != null && length(v.notifications) > 0 }
+  value       = { for k, v in azurerm_active_directory_domain_service.active_directory_domain_services : k => one(v.notifications) if v.notifications != null && length(v.notifications) > 0 }
 }
 output "active_directory_domain_services_resource_group_name" {
   description = "Map of resource_group_name values across all active_directory_domain_services, keyed the same as var.active_directory_domain_services"
@@ -44,12 +44,12 @@ output "active_directory_domain_services_resource_id" {
 }
 output "active_directory_domain_services_secure_ldap" {
   description = "Map of secure_ldap values across all active_directory_domain_services, keyed the same as var.active_directory_domain_services"
-  value       = { for k, v in azurerm_active_directory_domain_service.active_directory_domain_services : k => v.secure_ldap if v.secure_ldap != null && length(v.secure_ldap) > 0 }
+  value       = { for k, v in azurerm_active_directory_domain_service.active_directory_domain_services : k => one(v.secure_ldap) if v.secure_ldap != null && length(v.secure_ldap) > 0 }
   sensitive   = true
 }
 output "active_directory_domain_services_security" {
   description = "Map of security values across all active_directory_domain_services, keyed the same as var.active_directory_domain_services"
-  value       = { for k, v in azurerm_active_directory_domain_service.active_directory_domain_services : k => v.security if v.security != null && length(v.security) > 0 }
+  value       = { for k, v in azurerm_active_directory_domain_service.active_directory_domain_services : k => one(v.security) if v.security != null && length(v.security) > 0 }
 }
 output "active_directory_domain_services_sku" {
   description = "Map of sku values across all active_directory_domain_services, keyed the same as var.active_directory_domain_services"
